@@ -4,7 +4,14 @@
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As EventArgs) Handles Me.Load
         ' Optional: logic that runs on every page load
     End Sub
-
+    ''' <summary>
+    ''' Handles the greeting button click.
+    ''' Reads the user's input from <c>t_entername</c>,
+    ''' sanitizes it, and displays either a welcome or warning
+    ''' message inside <c>msg_box</c>.
+    ''' </summary>
+    ''' <param name="sender">The button that was clicked.</param>
+    ''' <param name="e">Event data for the click event.</param>
     Protected Sub mybutton_Click(sender As Object, e As EventArgs) Handles mybutton.Click
         Dim name As String = t_entername.Text.Trim()
 
@@ -19,7 +26,14 @@
         msg_box.Visible = True
         ScriptManager.RegisterStartupScript(Me, Me.GetType(), "fadeIn", "fadeInMsgBox();", True)
     End Sub
-
+    ''' <summary>
+    ''' Handles the calculator button click.
+    ''' Validates that <c>txtNumber1</c> and <c>txtNumber2</c> are valid decimals,
+    ''' then performs the arithmetic operation selected in <c>ddlOperator</c>.
+    ''' Displays the result in <c>lblResult</c> or an error message in <c>ResultPanel</c>.
+    ''' </summary>
+    ''' <param name="sender">The button that was clicked.</param>
+    ''' <param name="e">Event data for the click event.</param>
     Protected Sub btnCalculate_Click(sender As Object, e As EventArgs) Handles btnCalculate.Click
         Dim num1 As Decimal
         Dim num2 As Decimal

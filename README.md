@@ -42,3 +42,15 @@ A VB.NET Web Forms application backed by Supabase (PostgreSQL), enabling admin a
 1. **Clone repository**  
    ```bash
    git clone https://github.com/YourUsername/SISProject.git
+
+### Default.aspx
+
+- **Greeting**: Enter your name in `t_entername` and click **Click me** (`mybutton_Click`).  
+  Displays a sanitized welcome message in `msg_box`.
+
+- **Calculator**:  
+  - Inputs: `txtNumber1`, `txtNumber2`  
+  - Operator selector: `ddlOperator`  
+  - Button: `btnCalculate` (`btnCalculate_Click`)  
+  - Output: `lblResult` inside `ResultPanel`  
+  - Error handling for invalid numbers and division by zero  
