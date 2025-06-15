@@ -16,7 +16,7 @@
         Dim name As String = t_entername.Text.Trim()
 
         If Not String.IsNullOrEmpty(name) Then
-            lbl_message.Text = $"Welcome, {Server.HtmlEncode(name)}!"
+            lbl_message.Text = "Welcome, {Server.HtmlEncode(name)}!"
             msg_box.CssClass = "alert alert-success mt-4 fade show"
         Else
             lbl_message.Text = "Please enter a name."

@@ -42,7 +42,7 @@ A VB.NET Web Forms application backed by Supabase (PostgreSQL), enabling admin a
 1. **Clone repository**  
    ```bash
    git clone https://github.com/YourUsername/SISProject.git
-
+   - Removed `<system.codedom>` from `web.config` so the default .NET Framework VB compiler is used (no bin\roslyn folder needed).
 ### Default.aspx
 
 - **Greeting**: Enter your name in `t_entername` and click **Click me** (`mybutton_Click`).  
