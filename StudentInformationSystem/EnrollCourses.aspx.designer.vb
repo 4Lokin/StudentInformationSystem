@@ -11,32 +11,23 @@ Option Strict On
 Option Explicit On
 
 
-Partial Public Class SiteMaster
+Partial Public Class EnrollCourses
 
     '''<summary>
-    '''phAdminEnrollments control.
+    '''CoursesGrid control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents phAdminEnrollments As Global.System.Web.UI.WebControls.PlaceHolder
+    Protected WithEvents CoursesGrid As Global.System.Web.UI.WebControls.GridView
 
     '''<summary>
-    '''phStudentEnroll control.
+    '''lblMessage control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents phStudentEnroll As Global.System.Web.UI.WebControls.PlaceHolder
-
-    '''<summary>
-    '''MainContent control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents MainContent As Global.System.Web.UI.WebControls.ContentPlaceHolder
+    Protected WithEvents lblMessage As Global.System.Web.UI.WebControls.Label
 End Class

@@ -235,9 +235,13 @@
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Content\Site.css" />
+    <Content Include="EnrollCourses.aspx" />
     <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="ManageCourses.aspx" />
+    <Content Include="ManageEnrollments.aspx" />
+    <Content Include="ManageStudents.aspx" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
@@ -422,6 +426,13 @@
       <DependentUpon>Contact.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
+    <Compile Include="EnrollCourses.aspx.designer.vb">
+      <DependentUpon>EnrollCourses.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="EnrollCourses.aspx.vb">
+      <DependentUpon>EnrollCourses.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
     <Compile Include="Default.aspx.vb">
       <SubType>ASPXCodeBehind</SubType>
       <DependentUpon>Default.aspx</DependentUpon>
@@ -431,6 +442,27 @@
     </Compile>
     <Compile Include="Global.asax.vb">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="ManageCourses.aspx.designer.vb">
+      <DependentUpon>ManageCourses.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ManageCourses.aspx.vb">
+      <DependentUpon>ManageCourses.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="ManageEnrollments.aspx.designer.vb">
+      <DependentUpon>ManageEnrollments.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ManageEnrollments.aspx.vb">
+      <DependentUpon>ManageEnrollments.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="ManageStudents.aspx.designer.vb">
+      <DependentUpon>ManageStudents.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ManageStudents.aspx.vb">
+      <DependentUpon>ManageStudents.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Models\IdentityModels.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
