@@ -3,9 +3,15 @@
 ' Backend logic for managing student records in the system
 Public Class ManageStudents
     Inherits Page
-
-    ' Read connection string from Web.config
-    Private ReadOnly connStr As String = ConfigurationManager.ConnectionStrings("SupabaseConnection").ConnectionString
+    Sub Application_Start()
+        Dim connStr As String = ConfigurationManager.ConnectionStrings("SupabaseConnection").ConnectionString
+        Using conn As New NpgsqlConnection(connStr)
+            conn.Open()
+            Dim cmd As New NpgsqlCommand("SELECT id, first_name, last_name, email, enrollment_date FROM students ORDER BY id", conn)
+            Dim da As New NpgsqlDataAdapter(cmd)
+            Dim dt As New DataSet("Students")
+        End Using
+    End Sub
 
     ' Page load handler – executed only on first load (not postbacks)
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As EventArgs) Handles Me.Load
@@ -17,14 +23,10 @@ Public Class ManageStudents
 
     ' Loads student data from the database into the GridView
     Private Sub LoadGrid()
-        Using conn As New NpgsqlConnection(connStr)
-            conn.Open()
-            Dim cmd As New NpgsqlCommand("SELECT id, first_name, last_name, email, enrollment_date FROM students ORDER BY id", conn)
-            Dim da As New NpgsqlDataAdapter(cmd)
-            Dim dt As New DataTable()
-            da.Fill(dt)
-            gvStudents.DataSource = dt
-            gvStudents.DataBind()
+        Application_Start()
+        da.Fill(dt)
+        gvStudents.DataSource = dt
+        gvStudents.DataBind()
         End Using
     End Sub
 

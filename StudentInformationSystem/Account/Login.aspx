@@ -1,67 +1,43 @@
-﻿<%@ Page Title="Anmelden" Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master" CodeBehind="Login.aspx.vb" Inherits="StudentInformationSystem.Login" Async="true" %>
-
-<%@ Register Src="~/Account/OpenAuthProviders.ascx" TagPrefix="uc" TagName="OpenAuthProviders" %>
+﻿<%@ Page Title="Login" Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master" CodeBehind="Login.aspx.vb" Inherits="StudentInformationSystem.Login" %>
 
 <asp:Content runat="server" ID="BodyContent" ContentPlaceHolderID="MainContent">
-    <main aria-labelledby="title">
-        <h2 id="title"><%: Title %>.</h2>
+    <main>
+        <%-- Page heading --%>
+        <h2>Login</h2>
 
-        <div class="row">
-            <div class="col-md-8">
-                <section id="loginForm">
-                    <div>
-                        <h4>Lokales Konto für die Anmeldung verwenden.</h4>
-                        <hr />
-                        <asp:PlaceHolder runat="server" ID="ErrorMessage" Visible="false">
-                            <p class="text-danger">
-                                <asp:Literal runat="server" ID="FailureText" />
-                            </p>
-                        </asp:PlaceHolder>
-                        <div class="row">
-                            <asp:Label runat="server" AssociatedControlID="Email" CssClass="col-md-2 col-form-label">E-Mail</asp:Label>
-                            <div class="col-md-10">
-                                <asp:TextBox runat="server" ID="Email" CssClass="form-control" TextMode="Email" />
-                                <asp:RequiredFieldValidator runat="server" ControlToValidate="Email"
-                                    CssClass="text-danger" ErrorMessage="Das E-Mail-Feld ist erforderlich." />
-                            </div>
-                        </div>
-                        <div class="row">
-                            <asp:Label runat="server" AssociatedControlID="Password" CssClass="col-md-2 col-form-label">Kennwort</asp:Label>
-                            <div class="col-md-10">
-                                <asp:TextBox runat="server" ID="Password" TextMode="Password" CssClass="form-control" />
-                                <asp:RequiredFieldValidator runat="server" ControlToValidate="Password" CssClass="text-danger" ErrorMessage="Das Kennwortfeld ist erforderlich." />
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="offset-md-2 col-md-10">
-                                <div class="checkbox">
-                                    <asp:CheckBox runat="server" ID="RememberMe" />
-                                    <asp:Label runat="server" AssociatedControlID="RememberMe">Speichern?</asp:Label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="offset-md-2 col-md-10">
-                                <asp:Button runat="server" OnClick="LogIn" Text="Anmelden" CssClass="btn btn-outline-dark" />
-                            </div>
-                        </div>
-                    </div>
-                    <p>
-                        <asp:HyperLink runat="server" ID="RegisterHyperLink" ViewStateMode="Disabled">Als neuer Benutzer registrieren</asp:HyperLink>
-                    </p>
-                    <p>
-                        <%-- Enable this once you have account confirmation enabled for password reset functionality
-                        <asp:HyperLink runat="server" ID="ForgotPasswordHyperLink" ViewStateMode="Disabled">Forgot your password?</asp:HyperLink>
-                        --%>
-                    </p>
-                </section>
-            </div>
+        <%-- Placeholder for login error messages --%>
+        <asp:PlaceHolder runat="server" ID="ErrorMessage" Visible="false">
+            <p class="text-danger">
+                <asp:Literal runat="server" ID="FailureText" />
+            </p>
+        </asp:PlaceHolder>
 
-            <div class="col-md-4">
-                <section id="socialLoginForm">
-                    <uc:OpenAuthProviders runat="server" ID="OpenAuthLogin" />
-                </section>
-            </div>
+        <%-- Username input field --%>
+        <div class="form-group">
+            <asp:Label runat="server" AssociatedControlID="Email" CssClass="control-label">Username</asp:Label>
+            <asp:TextBox runat="server" ID="Email" CssClass="form-control" />
+            <asp:RequiredFieldValidator runat="server" ControlToValidate="Email"
+                ErrorMessage="Username is required." CssClass="text-danger" />
         </div>
+
+        <%-- Password input field --%>
+        <div class="form-group">
+            <asp:Label runat="server" AssociatedControlID="Password" CssClass="control-label">Password</asp:Label>
+            <asp:TextBox runat="server" ID="Password" CssClass="form-control" TextMode="Password" />
+            <asp:RequiredFieldValidator runat="server" ControlToValidate="Password"
+                ErrorMessage="Password is required." CssClass="text-danger" />
+        </div>
+
+        <%-- Login button --%>
+        <div class="form-group">
+            <asp:Button runat="server" Text="Login" CssClass="btn btn-primary" OnClick="LogIn" />
+        </div>
+
+        <%-- Registration link for new users --%>
+        <p>
+            <asp:HyperLink runat="server" ID="RegisterHyperLink" NavigateUrl="~/Account/Register.aspx">
+                Don't have an account? Register
+            </asp:HyperLink>
+        </p>
     </main>
 </asp:Content>

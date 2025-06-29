@@ -1,10 +1,5 @@
-﻿Imports System
-Imports System.Threading.Tasks
-Imports Microsoft.AspNet.Identity
-Imports Microsoft.AspNet.Identity.EntityFramework
+﻿Imports Microsoft.AspNet.Identity
 Imports Microsoft.AspNet.Identity.Owin
-Imports Microsoft.Owin.Security
-Imports Owin
 
 Partial Public Class Manage
     Inherits System.Web.UI.Page
@@ -72,10 +67,10 @@ Partial Public Class Manage
         If Not IsPostBack Then
             ' Zu rendernde Abschnitte ermitteln
             If HasPassword(manager) Then
-              ChangePassword.Visible = True
+                ChangePassword.Visible = True
             Else
-              CreatePassword.Visible = True
-              ChangePassword.Visible = False
+                CreatePassword.Visible = True
+                ChangePassword.Visible = False
             End If
 
             ' Rendererfolgsmeldung
@@ -84,10 +79,10 @@ Partial Public Class Manage
                 ' Abfragezeichenfolge aus der Aktion entfernen
                 Form.Action = ResolveUrl("~/Account/Manage")
 
-                SuccessMessage = If(message = "ChangePwdSuccess", "Ihr Kennwort wurde geändert.", 
-                    If(message = "SetPwdSuccess", "Ihr Kennwort wurde festgelegt.", 
-                    If(message = "RemoveLoginSuccess", "Das Konto wurde entfernt.", 
-                    If(message = "AddPhoneNumberSuccess", "Die Telefonnummer wurde hinzugefügt.", 
+                SuccessMessage = If(message = "ChangePwdSuccess", "Ihr Kennwort wurde geändert.",
+                    If(message = "SetPwdSuccess", "Ihr Kennwort wurde festgelegt.",
+                    If(message = "RemoveLoginSuccess", "Das Konto wurde entfernt.",
+                    If(message = "AddPhoneNumberSuccess", "Die Telefonnummer wurde hinzugefügt.",
                     If(message = "RemovePhoneNumberSuccess", "Die Telefonnummer wurde entfernt.", String.Empty)))))
                 SuccessMessagePlaceHolder.Visible = Not String.IsNullOrEmpty(SuccessMessage)
             End If
@@ -110,7 +105,7 @@ Partial Public Class Manage
         End If
         Dim userInfo = manager.FindById(User.Identity.GetUserId())
         If userInfo IsNot Nothing Then
-            signInManager.SignIn(userInfo, isPersistent := False, rememberBrowser := False)
+            signInManager.SignIn(userInfo, isPersistent:=False, rememberBrowser:=False)
             Response.Redirect("/Account/Manage?m=RemovePhoneNumberSuccess")
         End If
     End Sub
