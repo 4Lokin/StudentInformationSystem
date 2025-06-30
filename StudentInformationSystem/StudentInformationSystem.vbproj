@@ -240,6 +240,7 @@
     <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Logout.aspx" />
     <Content Include="ManageCourses.aspx" />
     <Content Include="ManageEnrollments.aspx" />
     <Content Include="ManageStudents.aspx" />
@@ -450,6 +451,13 @@
     </Compile>
     <Compile Include="Global.asax.vb">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Logout.aspx.designer.vb">
+      <DependentUpon>Logout.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Logout.aspx.vb">
+      <DependentUpon>Logout.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="ManageCourses.aspx.designer.vb">
       <DependentUpon>ManageCourses.aspx</DependentUpon>
