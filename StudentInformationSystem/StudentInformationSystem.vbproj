@@ -235,11 +235,11 @@
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Content\Site.css" />
+    <Content Include="CourseStatistics.aspx" />
     <Content Include="EnrollCourses.aspx" />
     <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="Logout.aspx" />
     <Content Include="ManageCourses.aspx" />
     <Content Include="ManageEnrollments.aspx" />
     <Content Include="ManageStudents.aspx" />
@@ -272,7 +272,7 @@
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
     <Content Include="Account\Web.config" />
-    <Content Include="CourseStatistics.aspx" />
+    <None Include="My Project\PublishProfiles\StudentInformationSystem20250630223737 - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
@@ -427,6 +427,13 @@
       <DependentUpon>Contact.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
+    <Compile Include="CourseStatistics.aspx.designer.vb">
+      <DependentUpon>CourseStatistics.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CourseStatistics.aspx.vb">
+      <DependentUpon>CourseStatistics.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
     <Compile Include="EnrollCourses.aspx.designer.vb">
       <DependentUpon>EnrollCourses.aspx</DependentUpon>
     </Compile>
@@ -443,13 +450,6 @@
     </Compile>
     <Compile Include="Global.asax.vb">
       <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
-    <Compile Include="Logout.aspx.designer.vb">
-      <DependentUpon>Logout.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Logout.aspx.vb">
-      <DependentUpon>Logout.aspx</DependentUpon>
-      <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="ManageCourses.aspx.designer.vb">
       <DependentUpon>ManageCourses.aspx</DependentUpon>
@@ -513,13 +513,6 @@
     </Compile>
     <Compile Include="Site.Mobile.Master.designer.vb">
       <DependentUpon>Site.Mobile.Master</DependentUpon>
-    </Compile>
-    <Compile Include="CourseStatistics.aspx.designer.vb">
-      <DependentUpon>CourseStatistics.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="CourseStatistics.aspx.vb">
-      <DependentUpon>CourseStatistics.aspx</DependentUpon>
-      <SubType>ASPXCodebehind</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>

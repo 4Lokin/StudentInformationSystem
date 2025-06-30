@@ -10,7 +10,16 @@ Public Class ManageCourses
     ' Initial page load: load course data into GridView
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As EventArgs) Handles Me.Load
         If Not IsPostBack Then
-            LoadGrid() ' Only load data if the page is not a postback (i.e., first load)
+            ' Nur Admins dürfen weiter
+            If Session("role") Is Nothing _
+           OrElse Session("role").ToString().Trim().ToLower() <> "admin" Then
+                lblMessage.Text = "Access denied. Admins only."
+                gvCourses.Visible = False
+                Return
+            End If
+
+            ' Erst hier laden, wenn Admin
+            LoadGrid()
         End If
     End Sub
 
@@ -40,10 +49,6 @@ Public Class ManageCourses
             cmd.Parameters.AddWithValue("@format", txtFormat.Text)
             cmd.Parameters.AddWithValue("@instructor", txtInstructor.Text)
             cmd.ExecuteNonQuery()
-            lblMessage.Text = "Course added successfully."
-            lblMessage.CssClass = "alert alert-success"
-            LoadGrid()
-            ClearForm()
         End Using
 
         Response.Redirect(Request.RawUrl) ' Refresh the page to reflect changes
@@ -64,10 +69,6 @@ Public Class ManageCourses
             cmd.Parameters.AddWithValue("@instructor", txtInstructor.Text)
             cmd.Parameters.AddWithValue("@id", Convert.ToInt32(hfCourseId.Value))
             cmd.ExecuteNonQuery()
-            lblMessage.Text = "Course updated successfully."
-            lblMessage.CssClass = "alert alert-success"
-            LoadGrid()
-            ClearForm()
         End Using
 
         Response.Redirect(Request.RawUrl) ' Refresh the page
@@ -82,10 +83,6 @@ Public Class ManageCourses
             Dim cmd As New NpgsqlCommand("DELETE FROM courses WHERE course_id=@id", conn)
             cmd.Parameters.AddWithValue("@id", Convert.ToInt32(hfCourseId.Value))
             cmd.ExecuteNonQuery()
-            lblMessage.Text = "Course deleted successfully."
-            lblMessage.CssClass = "alert alert-success"
-            LoadGrid()
-            ClearForm()
         End Using
 
         Response.Redirect(Request.RawUrl) ' Refresh the page

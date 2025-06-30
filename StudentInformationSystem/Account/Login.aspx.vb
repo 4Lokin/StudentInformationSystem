@@ -1,52 +1,68 @@
-﻿Imports System.Web
-Imports System.Web.UI
-Imports Microsoft.AspNet.Identity
-Imports Microsoft.AspNet.Identity.EntityFramework
-Imports Microsoft.AspNet.Identity.Owin
-Imports Microsoft.Owin.Security
-Imports Owin
+﻿Imports System.Security.Cryptography
+Imports Npgsql
 
+' Code-behind for the Login page
 Partial Public Class Login
-    Inherits Page
+    Inherits System.Web.UI.Page
+
+    ' Runs when the page is first loaded
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
-        RegisterHyperLink.NavigateUrl = "Register"
-        ' Diese Option aktivieren, nachdem Sie die Kontobestätigung für die Funktion zum Zurücksetzen des Kennworts aktiviert haben
-        ' ForgotPasswordHyperLink.NavigateUrl = "Forgot"
-        OpenAuthLogin.ReturnUrl = Request.QueryString("ReturnUrl")
-        Dim returnUrl = HttpUtility.UrlEncode(Request.QueryString("ReturnUrl"))
-        If Not [String].IsNullOrEmpty(returnUrl) Then
-            RegisterHyperLink.NavigateUrl += "?ReturnUrl=" & returnUrl
-        End If
+        ' Set the URL for the registration link
+        RegisterHyperLink.NavigateUrl = "~/Account/Register.aspx"
     End Sub
 
+    ' Handles login button click
     Protected Sub LogIn(sender As Object, e As EventArgs)
         If IsValid Then
-            ' Benutzerkennwort überprüfen
-            Dim manager = Context.GetOwinContext().GetUserManager(Of ApplicationUserManager)()
-            Dim signinManager = Context.GetOwinContext().GetUserManager(Of ApplicationSignInManager)()
+            ' Read and sanitize user input
+            Dim usernameInput As String = Email.Text.Trim()
+            Dim passwordInput As String = Password.Text.Trim()
+            Dim connStr As String = ConfigurationManager.ConnectionStrings("SupabaseConnection")?.ConnectionString
 
-            ' Anmeldefehler werden bezüglich einer Kontosperre nicht gezählt.
-            ' Wenn Sie aktivieren möchten, dass Kennwortfehler eine Sperre auslösen, ändern Sie in "shouldLockout:= True".
-            Dim result = signinManager.PasswordSignIn(Email.Text, Password.Text, RememberMe.Checked, shouldLockout:=False)
+            ' If connection string is missing, show error
+            If String.IsNullOrEmpty(connStr) Then
+                FailureText.Text = "Connection string 'SupabaseConnection' not found."
+                ErrorMessage.Visible = True
+                Return
+            End If
 
-            Select Case result
-                Case SignInStatus.Success
-                    IdentityHelper.RedirectToReturnUrl(Request.QueryString("ReturnUrl"), Response)
-                    Exit Select
-                Case SignInStatus.LockedOut
-                    Response.Redirect("/Account/Lockout")
-                    Exit Select
-                Case SignInStatus.RequiresVerification
-                    Response.Redirect(String.Format("/Account/TwoFactorAuthenticationSignIn?ReturnUrl={0}&RememberMe={1}",
-                                                    Request.QueryString("ReturnUrl"),
-                                                    RememberMe.Checked),
-                                      True)
-                    Exit Select
-                Case Else
-                    FailureText.Text = "Ungültiger Anmeldeversuch."
+            Try
+                Using conn As New NpgsqlConnection(connStr)
+                    conn.Open()
+
+                    ' Query to get the stored password hash and role for the user
+                    Dim sql As String = "SELECT password_hash, role FROM users WHERE username = @username"
+                    Using cmd As New NpgsqlCommand(sql, conn)
+                        cmd.Parameters.AddWithValue("@username", usernameInput)
+
+                        Using reader = cmd.ExecuteReader()
+                            If reader.Read() Then
+                                Dim storedHash As String = reader("password_hash").ToString()
+                                Dim role As String = reader("role").ToString()
+
+                                ' Verify password using PBKDF2 hash check
+                                If VerifyPassword(passwordInput, storedHash) Then
+                                    ' Login success: save user info in session
+                                    Session("username") = usernameInput
+                                    Session("role") = role.ToLower()
+                                    Response.Redirect("~/Default.aspx") ' Redirect to homepage
+                                    Return
+                                End If
+                            End If
+                        End Using
+                    End Using
+
+                    ' If no match or invalid password
+                    FailureText.Text = "Incorrect username or password."
                     ErrorMessage.Visible = True
-                    Exit Select
-            End Select
+
+                End Using
+
+            Catch ex As Exception
+                ' Handle and show database or connection error
+                FailureText.Text = "Login error: " & ex.Message
+                ErrorMessage.Visible = True
+            End Try
         End If
     End Sub
 

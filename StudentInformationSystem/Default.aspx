@@ -9,7 +9,7 @@
             background-image: url('https://images.unsplash.com/photo-1522199710521-72d69614c702?crop=entropy&cs=tinysrgb&fit=max&fm=jpg'); /* Background image URL */
             background-size: cover;         /* Cover entire section */
             background-position: center;    /* Center the image */
-            height: 80vh;                   /* Take 80% of the viewport height */
+            height: 90vh;                   /* Take 90% of the viewport height */
             display: flex;                 /* Flexbox for vertical/horizontal centering */
             align-items: center;
             justify-content: center;
