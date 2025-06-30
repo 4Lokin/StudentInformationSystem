@@ -27,7 +27,7 @@ Partial Public Class Login
 
             ' Anmeldefehler werden bezüglich einer Kontosperre nicht gezählt.
             ' Wenn Sie aktivieren möchten, dass Kennwortfehler eine Sperre auslösen, ändern Sie in "shouldLockout:= True".
-            Dim result = signinManager.PasswordSignIn(Email.Text, Password.Text, RememberMe.Checked, shouldLockout := False)
+            Dim result = signinManager.PasswordSignIn(Email.Text, Password.Text, RememberMe.Checked, shouldLockout:=False)
 
             Select Case result
                 Case SignInStatus.Success
@@ -49,4 +49,21 @@ Partial Public Class Login
             End Select
         End If
     End Sub
+
+    ' Password verification using PBKDF2 hash (Rfc2898DeriveBytes)
+    Private Function VerifyPassword(inputPassword As String, storedHash As String) As Boolean
+        ' Split the stored hash into salt and actual hash
+        Dim parts = storedHash.Split(":"c)
+        If parts.Length <> 2 Then Return False
+
+        Dim salt = Convert.FromBase64String(parts(0))
+        Dim stored = Convert.FromBase64String(parts(1))
+
+        ' Derive hash from input password using the same salt
+        Using pbkdf2 As New Rfc2898DeriveBytes(inputPassword, salt, 10000)
+            Dim inputHash = pbkdf2.GetBytes(32) ' 32 bytes = 256-bit hash
+            ' Compare byte sequences
+            Return stored.SequenceEqual(inputHash)
+        End Using
+    End Function
 End Class

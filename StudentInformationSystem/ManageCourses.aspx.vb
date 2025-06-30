@@ -40,6 +40,10 @@ Public Class ManageCourses
             cmd.Parameters.AddWithValue("@format", txtFormat.Text)
             cmd.Parameters.AddWithValue("@instructor", txtInstructor.Text)
             cmd.ExecuteNonQuery()
+            lblMessage.Text = "Course added successfully."
+            lblMessage.CssClass = "alert alert-success"
+            LoadGrid()
+            ClearForm()
         End Using
 
         Response.Redirect(Request.RawUrl) ' Refresh the page to reflect changes
@@ -60,6 +64,10 @@ Public Class ManageCourses
             cmd.Parameters.AddWithValue("@instructor", txtInstructor.Text)
             cmd.Parameters.AddWithValue("@id", Convert.ToInt32(hfCourseId.Value))
             cmd.ExecuteNonQuery()
+            lblMessage.Text = "Course updated successfully."
+            lblMessage.CssClass = "alert alert-success"
+            LoadGrid()
+            ClearForm()
         End Using
 
         Response.Redirect(Request.RawUrl) ' Refresh the page
@@ -74,6 +82,10 @@ Public Class ManageCourses
             Dim cmd As New NpgsqlCommand("DELETE FROM courses WHERE course_id=@id", conn)
             cmd.Parameters.AddWithValue("@id", Convert.ToInt32(hfCourseId.Value))
             cmd.ExecuteNonQuery()
+            lblMessage.Text = "Course deleted successfully."
+            lblMessage.CssClass = "alert alert-success"
+            LoadGrid()
+            ClearForm()
         End Using
 
         Response.Redirect(Request.RawUrl) ' Refresh the page

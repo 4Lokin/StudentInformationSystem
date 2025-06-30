@@ -12,21 +12,21 @@
         <div class="mb-3 row">
             <%-- First Name input --%>
             <div class="col-md-3">
-                <asp:TextBox ID="txtFirstName" runat="server" CssClass="form-control" placeholder="First Name" />
+                <asp:TextBox ID="txtFirstName" runat="server" ValidateRequestMode="Disabled" CssClass="form-control" placeholder="First Name" />
                 <asp:RequiredFieldValidator ID="rfvFirstName" runat="server" ControlToValidate="txtFirstName"
                     ErrorMessage="First Name is required." CssClass="text-danger" Display="Dynamic" />
             </div>
 
             <%-- Last Name input --%>
             <div class="col-md-3">
-                <asp:TextBox ID="txtLastName" runat="server" CssClass="form-control" placeholder="Last Name" />
+                <asp:TextBox ID="txtLastName" runat="server" ValidateRequestMode="Disabled" CssClass="form-control" placeholder="Last Name" />
                 <asp:RequiredFieldValidator ID="rfvLastName" runat="server" ControlToValidate="txtLastName"
                     ErrorMessage="Last Name is required." CssClass="text-danger" Display="Dynamic" />
             </div>
 
             <%-- Email input (email format) --%>
             <div class="col-md-3">
-                <asp:TextBox ID="txtEmail" runat="server" CssClass="form-control" placeholder="Email" TextMode="Email" />
+                <asp:TextBox ID="txtEmail" runat="server" ValidateRequestMode="Disabled" CssClass="form-control" placeholder="Email" TextMode="Email" />
                 <asp:RequiredFieldValidator ID="rfvEmail" runat="server" ControlToValidate="txtEmail"
                     ErrorMessage="Email is required." CssClass="text-danger" Display="Dynamic" />
             </div>
