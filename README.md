@@ -2,199 +2,223 @@
 
 **Course:** Programming with Generative AI  
 **Author:** Nikola Kühne  
-**Due Date:** 30.06.25  
+**Due Date:** 30.06.2025  
 
 ---
 
-## 📖 Table of Contents
+## Table of Contents
 
 1. [Overview](#overview)  
 2. [Technology Stack](#technology-stack)  
-3. [Setup & Installation](#setup--installation)  
-4. [Project Structure](#project-structure)  
-5. [Features & Pages](#features--pages)  
-6. [Database Schema](#database-schema)  
-7. [Deployment](#deployment)  
-8. [Testing & Known Issues](#testing--known-issues)  
-9. [Grading Alignment](#grading-alignment)  
+3. [Prerequisites](#prerequisites)  
+4. [Setup & Installation](#setup--installation)  
+5. [Project Structure](#project-structure)  
+6. [Features & Pages](#features--pages)  
+7. [Database Schema](#database-schema)  
+8. [Deployment](#deployment)  
+9. [Testing & Known Issues](#testing--known-issues)  
+10. [Grading Alignment](#grading-alignment)  
 
 ---
 
 ## Overview
 
-A VB.NET Web Forms application backed by Supabase (PostgreSQL), enabling admin and student roles to manage student records, courses, enrollments, and visualize data.
+SIS is an ASP.NET Web Forms application in VB.NET backed by a PostgreSQL database (Supabase). It provides two user roles—admin and student—with role-based navigation and functionality:
+
+- Admins can manage students, courses and view all enrollments and statistics  
+- Students can enroll in courses and view their own enrollments  
+
+A confirmation email is sent upon successful student creation.
 
 ---
 
 ## Technology Stack
 
 - **Backend:** VB.NET Web Forms (.NET Framework 4.8)  
-- **Frontend:** ASP.NET Web Forms + Bootstrap 5  
-- **Database:** Supabase (PostgreSQL) via Npgsql  
+- **Frontend:** ASP.NET Web Forms, Bootstrap 5  
+- **Database:** PostgreSQL via Supabase, accessed with Npgsql  
 - **Charts:** Chart.js  
-- **Hosting:** Azure App Service (or SmarterASP.NET)  
-- **Version Control:** GitHub  
+- **Hosting:** Azure App Service (or any IIS host)  
+- **Version Control:** Git & GitHub  
+
+---
+
+## Prerequisites
+
+- Microsoft Visual Studio 2019 or later  
+- .NET Framework 4.7.2 or higher Developer Pack  
+- PostgreSQL database (e.g. Supabase)  
+- Npgsql ADO.NET provider (NuGet)  
+- SMTP credentials for email notifications  
 
 ---
 
 ## Setup & Installation
 
-1. **Clone repository**  
+1. **Clone the repository**  
    ```bash
-   git clone https://github.com/YourUsername/SISProject.git
-   - Removed `<system.codedom>` from `web.config` so the default .NET Framework VB compiler is used (no bin\roslyn folder needed).  
-    - Installed Npgsql v4.1.8 for PostgreSQL connectivity (compatible with .NET 4.7.2):
-  ```powershell
-  Install-Package Npgsql -Version 4.1.8
-  - Added SupabaseConnection in Web.config under `<connectionStrings>`:
-  ```xml
-  <add name="SupabaseConnection"
-       connectionString="Host=db.xvieysbmxkcndxmvkpax.supabase.co;Port=5432;Database=postgres;Username=postgres;Password=…;SSL Mode=Require;Trust Server Certificate=true;Max Auto Prepare=0"
-       providerName="Npgsql" />
+   git clone https://github.com/4Lokin/StudentInformationSystem.git
+   cd StudentInformationSystem
+2.	Open solution
+Open StudentInformationSystem.sln in Visual Studio.
+3.	Configure connection string
+In Web.config under <connectionStrings>
+<add name="SupabaseConnection"
+     connectionString="Host=YOUR_HOST;Port=5432;Database=YOUR_DB;Username=YOUR_USER;Password=YOUR_PASS;SSL Mode=Require;Trust Server Certificate=true"
+     providerName="Npgsql" />
+3.	
+4.	Configure SMTP settings
+In Web.config under <system.net>
+<mailSettings>
+  <smtp from="noreply@example.com">
+    <network host="smtp.example.com"
+             port="587"
+             userName="smtp_user"
+             password="smtp_pass"
+             enableSsl="true" />
+  </smtp>
+</mailSettings>
+4.	
+5.	Run SQL scripts
+Execute the SQL files in sql/schema.sql
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  username VARCHAR(50) UNIQUE NOT NULL,
+  password_hash VARCHAR(255) NOT NULL,
+  role VARCHAR(20) NOT NULL
+);
 
-### Default.aspx
+CREATE TABLE students (
+  id SERIAL PRIMARY KEY,
+  first_name VARCHAR(100) NOT NULL,
+  last_name VARCHAR(100) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  enrollment_date DATE NOT NULL
+);
 
-- **Greeting**: Enter your name in `t_entername` and click **Click me** (`mybutton_Click`).  
-  Displays a sanitized welcome message in `msg_box`.
+CREATE TABLE courses (
+  course_id SERIAL PRIMARY KEY,
+  course_name VARCHAR(255) NOT NULL,
+  ects INTEGER NOT NULL,
+  hours INTEGER NOT NULL,
+  format VARCHAR(50) NOT NULL,
+  instructor VARCHAR(255) NOT NULL
+);
 
-- **Calculator**:  
-  - Inputs: `txtNumber1`, `txtNumber2`  
-  - Operator selector: `ddlOperator`  
-  - Button: `btnCalculate` (`btnCalculate_Click`)  
-  - Output: `lblResult` inside `ResultPanel`  
-  - Error handling for invalid numbers and division by zero 
+CREATE TABLE enrollments (
+  id SERIAL PRIMARY KEY,
+  student_id INTEGER REFERENCES students(id),
+  course_id INTEGER REFERENCES courses(course_id)
+);
+5.	
+6.	Insert an admin user (optional)
+INSERT INTO users(username,password_hash,role)
+VALUES('admin','<hashed_password>','admin');
 
-  ---
-## Project Structure
+ 
+Project Structure
+StudentInformationSystem/
+├ Account/
+│  ├ Login.aspx
+│  ├ Login.aspx.vb
+│  ├ Register.aspx
+│  └ Register.aspx.vb
+├ Default.aspx
+├ Default.aspx.vb
+├ ManageStudents.aspx
+├ ManageStudents.aspx.vb
+├ ManageCourses.aspx
+├ ManageCourses.aspx.vb
+├ EnrollCourses.aspx
+├ EnrollCourses.aspx.vb
+├ ManageEnrollments.aspx
+├ ManageEnrollments.aspx.vb
+├ CourseStatistics.aspx
+├ CourseStatistics.aspx.vb
+├ Site.Master
+├ Site.Master.vb
+├ Web.config
+├ sql/
+│  ├ schema.sql
+│  └ data.sql
+└ StudentInformationSystem.sln
+ 
+Features & Pages
 
-```` ```text ````
-/SISProject
-│
-├─ StudentInformationSystem.sln
-├─ README.md
-└─ StudentInformationSystem/
-   ├─ Default.aspx
-   ├─ Default.aspx.vb
-   ├─ ManageStudents.aspx
-   ├─ ManageStudents.aspx.vb
-   ├─ ManageCourses.aspx
-   ├─ ManageCourses.aspx.vb
-   ├─ Enrollments.aspx
-   ├─ Enrollments.aspx.vb
-   ├─ Site.Master
-   ├─ web.config
-   └─ sql/
-      ├─ schema.sql
-      └─ data.sql
-```` ``` ````
+Default.aspx
+•	Greeting: Enter name in t_entername, click Click me, output in msg_box
+•	Calculator:
+o	Inputs: txtNumber1, txtNumber2
+o	Operator selector: ddlOperator
+o	Button: btnCalculate
+o	Output: lblResult inside ResultPanel
+o	Validation for numeric input and division by zero
+•	Dashboard: Bar chart (Chart.js) showing number of students per course
 
----
+ManageStudents.aspx
+•	CRUD for student records
+•	GridView with HTML decoding to avoid XSS errors
+•	Server-side validation (email via regex)
+•	Email confirmation after student creation (SendEnrollmentEmail)
 
+ManageCourses.aspx
+•	CRUD for courses
+•	GridView and Bootstrap styling
+•	Role-based access in Page_Load (Session("role") = "admin")
 
-## Features & Pages
+EnrollCourses.aspx
+•	Students enroll in courses via dropdowns
+•	View and delete own enrollments
 
-- **Default.aspx**  
-  - **Greeting**: Enter your name in `t_entername`, click **Click me** (`mybutton_Click`), shows a sanitized welcome in `msg_box` and clears the textbox.  
-  - **Calculator**:  
-    - Inputs: `txtNumber1`, `txtNumber2`  
-    - Operator selector: `ddlOperator`  
-    - Button: `btnCalculate` (`btnCalculate_Click`)  
-    - Output: `lblResult` inside `ResultPanel`  
-    - Error handling for invalid inputs and division by zero  
+ManageEnrollments.aspx
+•	Admin view of all enrollments
+•	Delete enrollments
 
-- **ManageStudents.aspx**  
-  - CRUD interface for student records (Create, Read via GridView, Update, Delete)  
-  - Server‐side validation and Bootstrap styling  
+CourseStatistics.aspx
+•	Course statistics visualization (Chart.js)
 
-- **ManageCourses.aspx**  
-- Full **CRUD** on student records:
-    - **Create:** Enter first name, last name, email, enrollment date → **Create**  
-    - **Read:** GridView lists all students with **Select** button  
-    - **Update:** After selecting a row, modify fields → **Update**  
-    - **Delete:** After selecting a row → **Delete**  
-  - Uses Npgsql to connect to Supabase via `SupabaseConnection`  
-  - Shows feedback messages in `pnlMessage` with Bootstrap alerts    
+Site.Master
+•	Navigation links in <asp:PlaceHolder> controls
+•	Role-based visibility (phAdminEnrollments.Visible = (role = "admin"), phStudentEnroll.Visible = (role = "student"))
 
-- **Enrollments.aspx**  
-  - Enroll students in courses via dropdowns  
-  - View and delete existing enrollments  
+Account/Login & Register
+•	Sets Session("username") and Session("role")
+•	Roles: admin or student
+ 
+Database Schema
+Table	Columns
+users	id, username, password_hash, role
+students	id, first_name, last_name, email, enrollment_date
+courses	course_id, course_name, ects, hours, format, instructor
+enrollments	id, student_id → students.id, course_id → courses.course_id
+SQL scripts are in the sql/ folder.
+ 
+Deployment
+•	Azure App Service
+1.	Right-click project → Publish → Azure App Service
+2.	Create or select an App Service → Publish
+•	Alternative IIS Hosting
+o	Adjust web.config for target environment
+o	Deploy via FTP or WebDeploy
+ 
+Testing & Known Issues
+•	Test Accounts
+o	Admin: admin / Password123!
+o	Student: student / Password123!
+•	Validation
+o	Required fields, email format, date format
+•	Known Issues
+o	None currently; please report bugs via GitHub Issues
+ 
+Grading Alignment
+Requirement	Implementation
+Project Setup	VS Web Forms template, Supabase connection
+Student Management (CRUD)	ManageStudents.aspx
+Course Management	ManageCourses.aspx
+Course Enrollment	EnrollCourses.aspx, ManageEnrollments.aspx
+Data Visualization	Chart.js in Default.aspx, CourseStatistics.aspx
+Authentication & Roles	ASP.NET Session, role-based MasterPage
+Responsive UI (Bootstrap 5)	All pages via Site.Master
+Email Notifications	SendEnrollmentEmail in ManageStudents.aspx.vb
+Documentation & Presentation	README.md, PowerPoint documentation
 
-- **Account/**  
-  - ASP.NET Individual Accounts for login & registration  
-  - Role‐based access control (Admin vs. Student)  
-
-- **Dashboard** (integrated into Default.aspx)  
-  - Chart.js bar chart showing the number of students per course  
-
-
----
-
-## Database Schema
-
-- **students**  
-  - `id` INT PRIMARY KEY AUTO-INCREMENT  
-  - `first_name` TEXT NOT NULL  
-  - `last_name` TEXT NOT NULL  
-  - `email` TEXT UNIQUE NOT NULL  
-  - `enrollment_date` DATE  
-
-- **courses**  
-  - `course_id` INT PRIMARY KEY AUTO-INCREMENT  
-  - `course_name` TEXT NOT NULL  
-  - `ects` INT NOT NULL  
-  - `hours` INT NOT NULL  
-  - `format` TEXT NOT NULL  
-  - `instructor` TEXT NOT NULL  
-
-- **enrollments**  
-  - `enrollment_id` INT PRIMARY KEY AUTO-INCREMENT  
-  - `student_id` INT REFERENCES students(id)  
-  - `course_id` INT REFERENCES courses(course_id)  
-  - `enrollment_date` DATE NOT NULL  
-
-SQL scripts live in `sql/schema.sql` and `sql/data.sql`.
-
----
-
-## Deployment
-
-- **Azure App Service**  
-  1. Right-click project → **Publish** → **Azure App Service** (Windows)  
-  2. Create new App Service or select existing  
-  3. Click **Publish**  
-  4. Visit `https://your-app.azurewebsites.net`  
-
-- **SmarterASP.NET** (alternative)  
-  1. Publish via FTP or Visual Studio to SmarterASP.NET  
-  2. Ensure `web.config` connection strings match hosting environment  
-
----
-
-## Testing & Known Issues
-
-- **Test Accounts**  
-  - Admin: `admin@example.com` / `Password123!`  
-  - Student: `student@example.com` / `Password123!`  
-
-- **Validation**  
-  - Calculator checks numeric input and division by zero  
-  - CRUD pages validate required fields  
-
-- **Known Issues**  
-  - None currently; please report bugs via GitHub Issues  
-
----
-
-## Grading Alignment
-
-| Requirement                    | Implementation                          |
-|--------------------------------|-----------------------------------------|
-| Project Setup                  | VS template, Supabase connection        |
-| Student Management (CRUD)      | ManageStudents.aspx                    |
-| Course Management              | ManageCourses.aspx                     |
-| Course Enrollment              | Enrollments.aspx                       |
-| Data Visualization             | Chart.js in Default.aspx                |
-| Authentication & Roles         | ASP.NET Individual Accounts             |
-| Responsive UI (Bootstrap)      | All pages / Site.Master                |
-| Email Notifications (Bonus)    | To be added in Enrollments.aspx         |
-| Documentation & Presentation   | README.md, XML comments, PPT            |
