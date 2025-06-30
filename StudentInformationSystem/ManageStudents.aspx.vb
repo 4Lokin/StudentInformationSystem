@@ -12,6 +12,19 @@ Public Class ManageStudents
     ' Executes on first page load, sets default enrollment date and loads student grid
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As EventArgs) Handles Me.Load
         If Not IsPostBack Then
+            ' Nur Admins dürfen weiter
+            If Session("role") Is Nothing _
+           OrElse Session("role").ToString().Trim().ToLower() <> "admin" Then
+                lblMessage.Text = "Access denied. Admins only."
+                gvStudents.Visible = False
+                btnAddStudent.Visible = False
+                btnUpdateStudent.Visible = False
+                btnDeleteStudent.Visible = False
+                btnClear.Visible = False
+                Return
+            End If
+
+            ' Erst wenn Admin:
             txtEnrollmentDate.Text = Date.Today.ToString("yyyy-MM-dd")
             LoadGrid()
         End If
